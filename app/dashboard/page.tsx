@@ -1,6 +1,6 @@
 "use client";
 // import { Button } from "@/components/ui/button";
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import React from "react";
 // import { getTasks } from "../api/tasks";
 
@@ -15,8 +15,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <div>
-      <h1>Welcome, {session.user.user.user.username}!</h1>
-      <button onClick={() => signOut()}>Sign Out</button>
+      {/* <button onClick={() => signOut()}>Sign Out</button> */}
       {/* <Button onClick={fetchTasks}>get Users Task</Button> */}
       {/* <div>
         {tasks.map((task) => (

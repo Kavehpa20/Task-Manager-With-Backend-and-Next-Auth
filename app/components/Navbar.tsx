@@ -1,19 +1,47 @@
+"use client";
+
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export const Navbar: React.FC = () => {
+  const router = useRouter();
+  const { data: session } = useSession();
+  const signOutHandler = () => {
+    signOut({
+      redirect: false,
+    });
+    router.push("/login");
+  };
   return (
-    <div className="w-full py-2 px-6 bg-slate-400 flex items-center gap-x-5">
-      <Link href="/login">
-        <button className="bg-slate-600 text-white rounded-lg px-4 py-2 hover:bg-slate-800 shadow-md">
-          Login
+    <div className="flex w-full items-center justify-between gap-x-5 bg-slate-400 px-6 py-2">
+      {session ? (
+        <span className="font-semibold capitalize">
+          Welcome, {session.user.user.user.username}!
+        </span>
+      ) : (
+        <Link href="/login">
+          <button className="rounded-lg bg-slate-600 px-4 py-2 text-white shadow-md hover:bg-slate-800">
+            Login
+          </button>
+        </Link>
+      )}
+      {!session && (
+        <button className="rounded-lg bg-slate-600 px-4 py-2 text-white shadow-md hover:bg-slate-800">
+          <Link href="/signup">SignUp</Link>
         </button>
-      </Link>
-      <Link href="/signup">
-        <button className="bg-slate-600 text-white rounded-lg px-4 py-2 hover:bg-slate-800 shadow-md">
-          SignUp
-        </button>
-      </Link>
-      <button className="bg-slate-600 text-white rounded-lg px-4 py-2 hover:bg-slate-800 shadow-md"></button>
+      )}
+
+      {session && (
+        <Link href="/">
+          <button
+            onClick={signOutHandler}
+            className="rounded-lg bg-slate-600 px-4 py-2 text-white shadow-md hover:bg-slate-800"
+          >
+            Sign Out
+          </button>
+        </Link>
+      )}
     </div>
   );
 };

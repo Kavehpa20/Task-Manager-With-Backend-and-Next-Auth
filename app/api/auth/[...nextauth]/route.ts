@@ -22,8 +22,9 @@ const authOptions: AuthOptions = {
 
           // If login is successful, return the user object
           if (user) return { user } as never;
+          // return null;
         } catch (error) {
-          console.error("Authorization error:", error);
+          console.log("Authorization error:", error);
           return null;
         }
         return null;
