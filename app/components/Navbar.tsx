@@ -1,8 +1,8 @@
 "use client";
 
-import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
 
 export const Navbar: React.FC = () => {
   const router = useRouter();

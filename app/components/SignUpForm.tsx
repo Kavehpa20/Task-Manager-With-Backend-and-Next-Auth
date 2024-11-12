@@ -5,13 +5,14 @@ import { InputWithLabel } from "./InputWithLable";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "../validation/login.validation";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+// import { signIn } from "next-auth/react";
+// import { useRouter } from "next/navigation";
 import { classNames } from "../utils/classNames";
 import React from "react";
+import { signupReq } from "../api/auth";
 
-export const LoginForm = () => {
-  const router = useRouter();
+export const SignUpForm = () => {
+  // const router = useRouter();
   const [error, setError] = React.useState<string>("");
   const [loading, setLoading] = React.useState<boolean>(false);
 
@@ -20,18 +21,20 @@ export const LoginForm = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const submit = async ({ username, password }: ILoginForm) => {
+  const submit = async (data: ILoginForm) => {
     setLoading(true);
-    const result = await signIn("credentials", {
-      redirect: false,
-      callbackUrl: "/dashboard",
-      username,
-      password,
-    });
-    setLoading(false);
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    result?.status === 200 && router.push("/dashboard");
-    if (result?.status === 401) setError("Username or Password is incorrect");
+    try {
+      const response = await signupReq(data);
+      console.log(response);
+      setLoading(false);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        if (Array.isArray(error.message)) {
+          setError(error.message.join(" "));
+        }
+        setLoading(false);
+      }
+    }
   };
 
   return (
@@ -79,7 +82,7 @@ export const LoginForm = () => {
         variant={loading ? "ghost" : "secondary"}
         disabled={loading ? true : false}
       >
-        Login
+        SignUp
       </Button>
     </form>
   );
